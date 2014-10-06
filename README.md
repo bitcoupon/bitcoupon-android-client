@@ -1,6 +1,7 @@
-[![Build Status](https://travis-ci.org/Habitats/bitcoupon.svg?branch=master)](https://travis-ci.org/Habitats/bitcoupon)
+Sample android application. It compiles and runs on its own.
 
-BitCoin Coupon
-==============
+In order to try it out, download: 
+- [Android Studio](https://developer.android.com/sdk/installing/studio.html)
+- Run it using either the built in emulator, or through [Genymotion](http://www.genymotion.com/)
 
-[insert sales pitch here]
+The app is available on [Play](https://play.google.com/store/apps/details?id=no.ntnu.bitcoupon).
