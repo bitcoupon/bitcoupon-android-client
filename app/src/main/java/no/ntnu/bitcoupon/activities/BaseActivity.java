@@ -15,6 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import no.ntnu.bitcoupon.interfaces.UIHelper;
+
 /**
  * Created by Patrick on 22.09.2014.
  *
@@ -23,7 +25,7 @@ import android.widget.Toast;
  * It also makes it easy to change the underlying activity implementation to one from the support library or similar, at
  * a later stage.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity implements UIHelper {
 
   private static final String TAG = BaseActivity.class.getSimpleName();
 
@@ -36,6 +38,7 @@ public abstract class BaseActivity extends Activity {
     super.onCreate(savedInstanceState);
   }
 
+  @Override
   public void setLoading(final boolean loading) {
     if (loading) {
       ++runningJobs;
@@ -51,11 +54,13 @@ public abstract class BaseActivity extends Activity {
     setProgressBarIndeterminateVisibility(shouldLoad);
   }
 
-
+  @Override
   public void displayToast(final String toast) {
     Toast.makeText(BaseActivity.this, toast, Toast.LENGTH_SHORT).show();
   }
 
+
+  @Override
   public void displayErrorDialog(final String title, final String message) {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
@@ -66,7 +71,7 @@ public abstract class BaseActivity extends Activity {
         .show();//
   }
 
-
+  @Override
   public void displayPromptDialog(final String title, final String question,
                                   final DialogInterface.OnClickListener dialogClickListener) {
     AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
@@ -78,12 +83,7 @@ public abstract class BaseActivity extends Activity {
         .show();
   }
 
-  /**
-   * Helper method to display an input dialog
-   * @param title
-   * @param desc
-   * @param listener
-   */
+  @Override
   public void displayInputDialog(final String title, final String desc,
                                  final DialogInterface.OnClickListener listener) {
     if (input != null) {
@@ -112,11 +112,7 @@ public abstract class BaseActivity extends Activity {
     });
   }
 
-  /**
-   * Helper method to display the software keyboard
-   *
-   * @param edit - the EditText field that should trigger the keyboard popup
-   */
+  @Override
   public void showKeyboard(EditText edit) {
     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.showSoftInput(edit, InputMethodManager.SHOW_IMPLICIT);
@@ -128,16 +124,13 @@ public abstract class BaseActivity extends Activity {
 
   }
 
-  /**
-   * Helper method to dismiss the software keyboard
-   *
-   * @param edit - the EditText field that should trigger the keyboard popup
-   */
+  @Override
   public void hideKeyboard(EditText edit) {
     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
   }
 
+  @Override
   public String getInputText() {
     return input.getText().toString().trim();
   }
