@@ -7,6 +7,10 @@ import no.ntnu.bitcoupon.models.Coupon;
  */
 public interface CouponFragmentListener {
 
+  /**
+   * Notifies the listener when then user initiates the spend coupon action
+   * @param coupon
+   */
   public void onSpendCoupon(Coupon coupon);
 
 }

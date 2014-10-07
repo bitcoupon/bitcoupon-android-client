@@ -30,13 +30,22 @@ import no.ntnu.bitcoupon.models.TransactionWrapper;
  */
 public class Network {
 
-  //  public static final String PRIVATE_KEY = "5JAy2V6vCJLQnD8rdvB2pF8S6bFZuhEzQ43D95k6wjdVQ4ipMYu"; // admin
+  /**
+   * public static final String PRIVATE_KEY = "5JAy2V6vCJLQnD8rdvB2pF8S6bFZuhEzQ43D95k6wjdVQ4ipMYu"; // admin
+   */
   public static final String PRIVATE_KEY = "5K2RmiXi23ZgLK3QLTkzV2BP5VitbAyLMjYLVqJ2xYy5exSJJh2"; // receiver
+  /**
+   * this is the address of the initial coupon creator
+   */
   public static final String CREATOR_ADDRESS = "138u97o2Sv5qUmucSasmeNf5CAb3B1CmD6";
+  /**
+   * this is the address that should be used when gifting THIS user coupons
+   */
+  public static final String USER_ADDRESS = "1Kau4L6BM1h6QzLYubq1qWrQSjWdZFQgMb";
   public static final String API_ROOT = "http://bitcoupon.no-ip.org:3002/backend/";
-  private static final String API_TRANSACTION_HISTORY = "transaction_history";
+  public static final String API_TRANSACTION_HISTORY = "transaction_history";
   public static final String TAG = Network.class.getSimpleName();
-  private static final String API_VERIFY_TRANSACTION = "verify_transaction";
+  public static final String API_VERIFY_TRANSACTION = "verify_transaction";
 
   public static void fetchTransactionHistory(final CouponCallback<TransactionHistory> callback) {
     new AsyncTask<Void, Void, TransactionHistory>() {

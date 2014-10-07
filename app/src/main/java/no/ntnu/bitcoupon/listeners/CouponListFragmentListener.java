@@ -11,5 +11,10 @@ import no.ntnu.bitcoupon.models.Coupon;
  */
 public interface CouponListFragmentListener {
 
+  /**
+   * Notifies the listener when the user clicks on a coupon in the list of coupons
+   *
+   * @param id - the internal ID for this coupon, NOT to be confused with transcation ID
+   */
   void onCouponClicked(Coupon id);
 }
