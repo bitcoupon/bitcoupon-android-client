@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import no.ntnu.bitcoupon.R;
 import no.ntnu.bitcoupon.listeners.CouponFragmentListener;
-import no.ntnu.bitcoupon.models.Coupon;
+import no.ntnu.bitcoupon.models.CouponWrapper;
 
 /**
  * Created by Patrick on 22.09.2014.
@@ -26,10 +26,10 @@ public class CouponFragment extends BaseFragment {
   public CouponFragment() {
   }
 
-  public static Fragment newInstance(Coupon coupon) {
+  public static Fragment newInstance(CouponWrapper coupon) {
     CouponFragment fragment = new CouponFragment();
     Bundle args = new Bundle();
-    args.putString(Coupon.COUPON_JSON, Coupon.toJson(coupon));
+    args.putString(CouponWrapper.COUPON_JSON, CouponWrapper.toJson(coupon));
     fragment.setArguments(args);
     return fragment;
   }
@@ -65,7 +65,9 @@ public class CouponFragment extends BaseFragment {
                               public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                   case DialogInterface.BUTTON_POSITIVE:
-                                    Coupon coupon = Coupon.fromJson(getArguments().getString(Coupon.COUPON_JSON));
+                                    CouponWrapper
+                                        coupon = CouponWrapper
+                                        .fromJson(getArguments().getString(CouponWrapper.COUPON_JSON));
                                     mListener.onSpendCoupon(coupon);
                                     break;
                                 }
@@ -74,11 +76,11 @@ public class CouponFragment extends BaseFragment {
       }
     });
 
-    Coupon coupon = Coupon.fromJson(getArguments().getString(Coupon.COUPON_JSON));
+    CouponWrapper coupon = CouponWrapper.fromJson(getArguments().getString(CouponWrapper.COUPON_JSON));
     id.setText("ID: " + coupon.getId());
     title.setText(coupon.getTitle());
     created.setText("Created: " + coupon.getCreated());
-    description.setText(Coupon.toJson(coupon));
+    description.setText(CouponWrapper.toJson(coupon));
     title.setText(coupon.getTitle());
     modified.setText("Modified:  " + coupon.getModified());
     return view;

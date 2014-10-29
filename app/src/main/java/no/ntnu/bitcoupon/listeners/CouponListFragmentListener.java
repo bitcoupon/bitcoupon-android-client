@@ -1,6 +1,6 @@
 package no.ntnu.bitcoupon.listeners;
 
-import no.ntnu.bitcoupon.models.Coupon;
+import no.ntnu.bitcoupon.models.CouponWrapper;
 
 /**
  * Created by Patrick on 22.09.2014.
@@ -16,5 +16,5 @@ public interface CouponListFragmentListener {
    *
    * @param id - the internal ID for this coupon, NOT to be confused with transcation ID
    */
-  void onCouponClicked(Coupon id);
+  void onCouponClicked(CouponWrapper id);
 }

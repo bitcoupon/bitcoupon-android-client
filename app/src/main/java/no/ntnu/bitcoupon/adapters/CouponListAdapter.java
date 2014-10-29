@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import no.ntnu.bitcoupon.R;
-import no.ntnu.bitcoupon.models.Coupon;
+import no.ntnu.bitcoupon.models.CouponWrapper;
 
 /**
  * Created by Patrick on 22.09.2014.
@@ -24,11 +24,11 @@ public class CouponListAdapter extends BaseAdapter {
 
   private static final String TAG = CouponListAdapter.class.getSimpleName();
   private final LayoutInflater mInflater;
-  private final List<Coupon> items;
+  private final List<CouponWrapper> items;
 
   public CouponListAdapter(Activity activity) {
     mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    items = new CopyOnWriteArrayList<Coupon>();
+    items = new CopyOnWriteArrayList<CouponWrapper>();
   }
 
   @Override
@@ -37,7 +37,7 @@ public class CouponListAdapter extends BaseAdapter {
   }
 
   @Override
-  public Coupon getItem(int position) {
+  public CouponWrapper getItem(int position) {
     return items.get(position);
   }
 
@@ -65,7 +65,7 @@ public class CouponListAdapter extends BaseAdapter {
     TextView modified = (TextView) view.findViewById(R.id.tv_coupon_modified);
     TextView created = (TextView) view.findViewById(R.id.tv_coupon_created);
 
-    Coupon coupon = getItem(position);
+    CouponWrapper coupon = getItem(position);
     id.setText(coupon.getId());
     title.setText(coupon.getTitle());
     created.setText(coupon.getCreated().toString());
@@ -80,11 +80,11 @@ public class CouponListAdapter extends BaseAdapter {
   }
 
 
-  public void add(Coupon dummy) {
+  public void add(CouponWrapper dummy) {
     items.add(dummy);
   }
 
-  public void remove(Coupon coupon) {
+  public void remove(CouponWrapper coupon) {
     items.remove(coupon);
   }
 

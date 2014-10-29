@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
@@ -18,13 +19,16 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import java.util.List;
 
 import bitcoupon.BitCoupon;
+import bitcoupon.transaction.Coupon;
+import bitcoupon.transaction.CouponList;
+import bitcoupon.transaction.OutputHistory;
 import bitcoupon.transaction.Transaction;
-import bitcoupon.transaction.TransactionHistory;
+import no.ntnu.bitcoupon.BitCouponApplication;
 import no.ntnu.bitcoupon.R;
 import no.ntnu.bitcoupon.adapters.CouponListAdapter;
 import no.ntnu.bitcoupon.callbacks.CouponCallback;
 import no.ntnu.bitcoupon.listeners.CouponListFragmentListener;
-import no.ntnu.bitcoupon.models.Coupon;
+import no.ntnu.bitcoupon.models.CouponWrapper;
 import no.ntnu.bitcoupon.network.Network;
 
 /**
@@ -86,24 +90,29 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
     // Set OnItemClickListener so we can be notified on item clicks
     couponList.setOnItemClickListener(this);
 
+    TextView addressField = (TextView) view.findViewById(R.id.tv_addreess);
+    addressField.setText(BitCouponApplication.getApplication().getAddress());
+
     return view;
   }
 
   public void fetchAll() {
     setLoading(true);
-    Network.fetchTransactionHistory(new CouponCallback<TransactionHistory>() {
+    Network.fetchOutputHistory(new CouponCallback<OutputHistory>() {
       @Override
-      public void onSuccess(int statusCode, TransactionHistory transactionHistory) {
-        List<String> addresses = BitCoupon.getCreatorAddresses(Network.PRIVATE_KEY, transactionHistory);
+      public void onSuccess(int statusCode, OutputHistory outputHistory) {
+        CouponList couponList = BitCoupon.getCoupons(BitCouponApplication.getApplication().getAddress(), outputHistory);
+
+        List<Coupon> coupons = couponList.getCoupons();
         couponAdapter.clear();
         int index = 1;
-        for (String couponAddress : addresses) {
-          couponAdapter.add(new Coupon(index++, couponAddress));
+        for (Coupon coupon : coupons) {
+          couponAdapter.add(new CouponWrapper(index++, coupon));
         }
         couponAdapter.notifyDataSetChanged();
 
         setLoading(false);
-        displayToast("Received " + addresses.size() + " coupons from the server!");
+        displayToast("Received " + coupons.size() + " coupons from the server!");
         mPullToRefreshLayout.setRefreshComplete();
       }
 
@@ -163,7 +172,7 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
     }
   }
 
-  public void removeCoupon(Coupon coupon) {
+  public void removeCoupon(CouponWrapper coupon) {
     couponAdapter.remove(coupon);
     couponAdapter.notifyDataSetChanged();
   }

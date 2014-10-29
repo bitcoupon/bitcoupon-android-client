@@ -4,18 +4,17 @@ import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.util.List;
-
 import bitcoupon.BitCoupon;
+import bitcoupon.transaction.OutputHistory;
 import bitcoupon.transaction.Transaction;
-import bitcoupon.transaction.TransactionHistory;
+import no.ntnu.bitcoupon.BitCouponApplication;
 import no.ntnu.bitcoupon.R;
 import no.ntnu.bitcoupon.callbacks.CouponCallback;
 import no.ntnu.bitcoupon.fragments.CouponFragment;
 import no.ntnu.bitcoupon.fragments.CouponListFragment;
 import no.ntnu.bitcoupon.listeners.CouponFragmentListener;
 import no.ntnu.bitcoupon.listeners.CouponListFragmentListener;
-import no.ntnu.bitcoupon.models.Coupon;
+import no.ntnu.bitcoupon.models.CouponWrapper;
 import no.ntnu.bitcoupon.network.Network;
 
 
@@ -41,31 +40,31 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
   }
 
   @Override
-  public void onCouponClicked(Coupon coupon) {
+  public void onCouponClicked(CouponWrapper coupon) {
     coupon.setModified();
     getFragmentManager().beginTransaction().replace(R.id.container, CouponFragment.newInstance(coupon))
         .addToBackStack(CouponFragment.TAG).commit();
   }
 
   @Override
-  public void onSpendCoupon(final Coupon coupon) {
+  public void onSpendCoupon(final CouponWrapper coupon) {
     setLoading(true);
-    Network.fetchTransactionHistory(new CouponCallback<TransactionHistory>() {
+    Network.fetchOutputHistory(new CouponCallback<OutputHistory>() {
       @Override
-      public void onSuccess(int statusCode, TransactionHistory transactionHistory) {
+      public void onSuccess(int statusCode, OutputHistory outputHistory) {
         // check that the coupon is valid
-        if (!isCouponValid(transactionHistory, coupon)) {
-          // if no coupon with that address was found, display an error and return
-          displayToast("Invalid coupon!");
-          getFragmentManager().popBackStack();
-          return;
-        }
+//        if (!isCouponValid(outputHistory, coupon)) {
+//          // if no coupon with that address was found, display an error and return
+//          displayToast("Invalid coupon!");
+//          getFragmentManager().popBackStack();
+//          return;
+//        }
 
         // Generate the send transaction object
-        Transaction transaction = BitCoupon.generateSendTransaction(Network.PRIVATE_KEY,  //
-                                                                    coupon.getCouponAddress(), //
-                                                                    Network.CREATOR_ADDRESS,  //
-                                                                    transactionHistory);
+        Transaction transaction = BitCoupon.generateSendTransaction(BitCouponApplication.getApplication().getPrivateKey(),  //
+                                                                    coupon.getCoupon(), //
+                                                                    BitCouponApplication.getApplication().getAddress(),  //
+                                                                    outputHistory);
 
         Network.spendCoupon(new CouponCallback<Transaction>() {
           @Override
@@ -99,14 +98,14 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
    * Check whether this coupon is valid; ie. it exist in the transaction history received from the server If the coupon
    * is invalid, this probably means the coupon was spent elsewhere, or that it was invalidated by the beckend
    */
-  private boolean isCouponValid(TransactionHistory transactionHistory, Coupon coupon) {
-    List<String> creatorAddresses = BitCoupon.getCreatorAddresses(Network.PRIVATE_KEY,  //
-                                                                  transactionHistory);
-    for (String couponAddress : creatorAddresses) {
-      if (couponAddress.equalsIgnoreCase(coupon.getCouponAddress())) {
-        return true;
-      }
-    }
-    return false;
-  }
+//  private boolean isCouponValid(OutputHistory OutputHistory, CouponWrapper coupon) {
+//    List<String> creatorAddresses = BitCoupon.getCreatorAddresses(Network.PRIVATE_KEY,  //
+//                                                                  OutputHistory);
+//    for (String couponAddress : creatorAddresses) {
+//      if (couponAddress.equalsIgnoreCase(coupon.getCouponAddress())) {
+//        return true;
+//      }
+//    }
+//    return false;
+//  }
 }

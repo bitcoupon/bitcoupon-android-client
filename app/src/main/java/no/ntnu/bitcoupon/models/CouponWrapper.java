@@ -5,33 +5,35 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 
+import bitcoupon.transaction.Coupon;
+
 /**
  * Created by Patrick on 22.09.2014.
  */
-public class Coupon {
+public class CouponWrapper {
 
   public static final String COUPON_JSON = "coupon_id";
-  private static final String TAG = Coupon.class.getSimpleName();
+  private static final String TAG = CouponWrapper.class.getSimpleName();
   private final int couponNumber;
-  private final String couponAddress;
+  private final Coupon coupon;
   private String title;
   private String description;
   private String id;
   private long created;
   private long modified;
 
-  public Coupon(int couponNumber, String couponAddress) {
+  public CouponWrapper(int couponNumber, Coupon coupon) {
     this.couponNumber = couponNumber;
-    this.couponAddress = couponAddress;
+    this.coupon = coupon;
     this.created = System.currentTimeMillis();
   }
 
   public String getCouponAddress() {
-    return couponAddress;
+    return coupon.getCreatorAddress();
   }
 
   public String getDescription() {
-    return couponAddress;
+    return coupon.getPayload();
   }
 
   public DateTime getCreated() {
@@ -55,20 +57,20 @@ public class Coupon {
   }
 
 
-  public static Coupon createDummy() {
-    Coupon dummy = new Coupon(999, "1Kau4L6BM1h6QzLYubq1qWrQSjWdZFQgMb");
-    dummy.id = String.valueOf((int) (Math.random() * 1000));
-    dummy.description = "This is the dummy coupons' description!";
-    dummy.title = "Dummy coupon";
-    return dummy;
+//  public static CouponWrapper createDummy() {
+//    CouponWrapper dummy = new CouponWrapper(999, "1Kau4L6BM1h6QzLYubq1qWrQSjWdZFQgMb");
+//    dummy.id = String.valueOf((int) (Math.random() * 1000));
+//    dummy.description = "This is the dummy coupons' description!";
+//    dummy.title = "Dummy coupon";
+//    return dummy;
+//  }
+
+  public static CouponWrapper fromJson(String json) {
+    return new Gson().fromJson(json, CouponWrapper.class);
   }
 
-  public static Coupon fromJson(String json) {
-    return new Gson().fromJson(json, Coupon.class);
-  }
-
-  public static String toJson(Coupon item) {
-    return new Gson().toJson(item, Coupon.class);
+  public static String toJson(CouponWrapper item) {
+    return new Gson().toJson(item, CouponWrapper.class);
   }
 
   @Override
@@ -89,10 +91,13 @@ public class Coupon {
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof Coupon)) {
+    if (!(o instanceof CouponWrapper)) {
       return false;
     }
-    return id.equals(((Coupon) o).getId());
+    return id.equals(((CouponWrapper) o).getId());
   }
 
+  public Coupon getCoupon() {
+    return coupon;
+  }
 }
