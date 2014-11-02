@@ -52,13 +52,6 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
     Network.fetchOutputHistory(new CouponCallback<OutputHistory>() {
       @Override
       public void onSuccess(int statusCode, OutputHistory outputHistory) {
-        // check that the coupon is valid
-//        if (!isCouponValid(outputHistory, coupon)) {
-//          // if no coupon with that address was found, display an error and return
-//          displayToast("Invalid coupon!");
-//          getFragmentManager().popBackStack();
-//          return;
-//        }
 
         // Generate the send transaction object
         Transaction transaction = BitCoupon.generateSendTransaction(BitCouponApplication.getApplication().getPrivateKey(),  //

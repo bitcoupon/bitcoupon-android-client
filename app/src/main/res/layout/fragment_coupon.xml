@@ -86,6 +86,17 @@
                     android:textSize="10sp"
                     />
         </LinearLayout>
+
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="address"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:id="@+id/tv_receiver"
+                />
+
         <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -95,6 +106,7 @@
                 android:id="@+id/b_spend_coupon"
                 style="@style/Roboto_Button"
                 />
+
     </LinearLayout>
 
 </RelativeLayout>

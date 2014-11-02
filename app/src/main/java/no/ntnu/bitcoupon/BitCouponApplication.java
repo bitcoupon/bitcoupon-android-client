@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 
 import bitcoupon.BitCoupon;
 import bitcoupon.transaction.OutputHistoryRequest;
+import no.ntnu.bitcoupon.callbacks.CouponCallback;
 import no.ntnu.bitcoupon.models.OutputHistoryRequestWrapper;
+import no.ntnu.bitcoupon.network.AddressTranslator;
+import no.ntnu.bitcoupon.network.Network;
 
 /**
  * Created by Patrick on 22.09.2014.
@@ -22,6 +25,7 @@ public class BitCouponApplication extends Application {
   private static final String PRIVATE_KEY = "PRIVATE_KEY";
   private static final String OUTPUT_HISTORY_REQUEST = "OUTPUT_HISTORY_REQUEST";
   private static final String ADDRESS = "ADDRESS";
+  private static final String ADDRESS_WORD = "ADDRESS_WORD";
   private static BitCouponApplication application;
 
   @Override
@@ -51,11 +55,29 @@ public class BitCouponApplication extends Application {
     String address = prefs.getString(ADDRESS, null);
     if (address == null) {
       address = BitCoupon.generateAddress(getPrivateKey());
+      Network.fetchAddressWord(new CouponCallback<AddressTranslator>() {
+        @Override
+        public void onSuccess(int statusCode, AddressTranslator response) {
+          setAddressWord(response.getWord());
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+
+        }
+      });
       SharedPreferences.Editor edit = prefs.edit();
       edit.putString(ADDRESS, address);
       edit.commit();
     }
     return address;
+  }
+
+  private void setAddressWord(String word) {
+    SharedPreferences prefs = getSecretPreferences();
+    SharedPreferences.Editor edit = prefs.edit();
+    edit.putString(ADDRESS_WORD, word);
+    edit.commit();
   }
 
   public String getOutputRequest() {
@@ -75,4 +97,13 @@ public class BitCouponApplication extends Application {
   public static BitCouponApplication getApplication() {
     return application;
   }
+
+  public String getAddressWord() {
+    SharedPreferences prefs = getSecretPreferences();
+    String addressWord = prefs.getString(ADDRESS_WORD, null);
+
+    return addressWord;
+  }
 }
+
+

@@ -29,6 +29,7 @@ import no.ntnu.bitcoupon.adapters.CouponListAdapter;
 import no.ntnu.bitcoupon.callbacks.CouponCallback;
 import no.ntnu.bitcoupon.listeners.CouponListFragmentListener;
 import no.ntnu.bitcoupon.models.CouponWrapper;
+import no.ntnu.bitcoupon.network.AddressTranslator;
 import no.ntnu.bitcoupon.network.Network;
 
 /**
@@ -90,8 +91,18 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
     // Set OnItemClickListener so we can be notified on item clicks
     couponList.setOnItemClickListener(this);
 
-    TextView addressField = (TextView) view.findViewById(R.id.tv_addreess);
-    addressField.setText(BitCouponApplication.getApplication().getAddress());
+    final TextView addressField = (TextView) view.findViewById(R.id.tv_addreess);
+    Network.fetchAddressWord(new CouponCallback<AddressTranslator>() {
+      @Override
+      public void onSuccess(int statusCode, AddressTranslator response) {
+        addressField.setText("Your ID: " + response.getWord());
+      }
+
+      @Override
+      public void onFail(int statusCode) {
+
+      }
+    });
 
     return view;
   }

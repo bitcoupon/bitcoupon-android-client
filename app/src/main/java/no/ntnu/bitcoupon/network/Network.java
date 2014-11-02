@@ -31,11 +31,13 @@ import no.ntnu.bitcoupon.models.TransactionWrapper;
 public class Network {
 
   public static final String USER_ADDRESS = "1Kau4L6BM1h6QzLYubq1qWrQSjWdZFQgMb";
-//  public static final String API_ROOT = "http://bitcoupon.no-ip.org:3002/backend/";
-  public static final String API_ROOT = "http://78.91.25.28:3002/backend/";
+    public static final String API_ROOT = "http://bitcoupon.no-ip.org:3002/backend/";
+//  public static final String API_ROOT = "http://78.91.25.28:3002/backend/";
   public static final String API_OUTPUT_HISTORY = "output_history";
   public static final String TAG = Network.class.getSimpleName();
   public static final String API_VERIFY_TRANSACTION = "verify_transaction";
+  public static final String API_TRANSLATE_WORD = "address";
+  public static final String API_TRANSLATE_ADDRESS = "word";
 
   public static void fetchOutputHistory(final CouponCallback<OutputHistory> callback) {
     new AsyncTask<Void, Void, OutputHistory>() {
@@ -53,7 +55,7 @@ public class Network {
           HttpClient httpClient = new DefaultHttpClient();
           response = httpClient.execute(post);
 
-          if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+          if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             return OutputHistory.fromJson(getReader(response));
           }
           return null;
@@ -126,6 +128,86 @@ public class Network {
         }
       }
     }.execute();
+  }
 
+  public static void fetchAddressWord(final CouponCallback<AddressTranslator> callback) {
+    new AsyncTask<Void, Void, AddressTranslator>() {
+      @Override
+      protected AddressTranslator doInBackground(Void... params) {
+        String url = API_ROOT + API_TRANSLATE_WORD;
+        HttpResponse response = null;
+        try {
+          Log.v(TAG, "requesting ... " + url);
+          HttpPost post = new HttpPost(new URI(url));
+          post.addHeader(getRequestTokenHeader());
+
+          post.addHeader("Content-type", "application/json");
+
+          AddressTranslator translator = new AddressTranslator();
+          translator.setAddress(BitCouponApplication.getApplication().getAddress());
+
+          String json = AddressTranslator.toJson(translator);
+          post.setEntity(new StringEntity(json, "UTF-8"));
+          HttpClient httpClient = new DefaultHttpClient();
+          response = httpClient.execute(post);
+
+          return AddressTranslator.fromJson(getReader(response));
+
+        } catch (Exception e) {
+          Log.e(TAG, "Exception", e);
+        }
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(AddressTranslator transaction) {
+        if (transaction != null) {
+          callback.onSuccess(HttpStatus.SC_OK, transaction);
+        } else {
+          callback.onFail(HttpStatus.SC_NO_CONTENT);
+        }
+      }
+    }.execute();
+  }
+
+
+  public static void fetchWordAddress(final CouponCallback<AddressTranslator> callback) {
+    new AsyncTask<Void, Void, AddressTranslator>() {
+      @Override
+      protected AddressTranslator doInBackground(Void... params) {
+        String url = API_ROOT + API_TRANSLATE_ADDRESS;
+        HttpResponse response = null;
+        try {
+          Log.v(TAG, "requesting ... " + url);
+          HttpPost post = new HttpPost(new URI(url));
+          post.addHeader(getRequestTokenHeader());
+
+          post.addHeader("Content-type", "application/json");
+
+          AddressTranslator translator = new AddressTranslator();
+          translator.setWord(BitCouponApplication.getApplication().getAddressWord());
+
+          String json = AddressTranslator.toJson(translator);
+          post.setEntity(new StringEntity(json, "UTF-8"));
+          HttpClient httpClient = new DefaultHttpClient();
+          response = httpClient.execute(post);
+
+          return AddressTranslator.fromJson(getReader(response));
+
+        } catch (Exception e) {
+          Log.e(TAG, "Exception", e);
+        }
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(AddressTranslator transaction) {
+        if (transaction != null) {
+          callback.onSuccess(HttpStatus.SC_OK, transaction);
+        } else {
+          callback.onFail(HttpStatus.SC_NO_CONTENT);
+        }
+      }
+    }.execute();
   }
 }

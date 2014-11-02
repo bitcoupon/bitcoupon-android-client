@@ -10,7 +10,7 @@
             android:id="@+id/ptr_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/button_list"
+            android:layout_above="@+id/tv_addreess"
             android:layout_alignParentTop="true"
             >
 
@@ -33,11 +33,18 @@
                 />
     </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
+
     <TextView
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:id="@+id/tv_addreess"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="ADDRESS FIELD"
+            android:background="@color/gray"
+            android:textColor="@color/white"
+            android:text="Your ID: "
+            android:textAllCaps="true"
+            android:layout_above="@+id/button_list"
             />
 
     <LinearLayout
@@ -58,4 +65,5 @@
                 />
 
     </LinearLayout>
+
 </RelativeLayout>
