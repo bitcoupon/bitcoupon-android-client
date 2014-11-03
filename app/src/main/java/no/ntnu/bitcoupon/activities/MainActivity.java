@@ -1,6 +1,8 @@
 package no.ntnu.bitcoupon.activities;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -45,6 +47,13 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
         .addToBackStack(CouponFragment.TAG).commit();
   }
 
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.main, menu);
+    return true;
+  }
   @Override
   public void onSpendCoupon(final CouponWrapper coupon) {
     setLoading(true);

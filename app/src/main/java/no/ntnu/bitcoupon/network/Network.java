@@ -30,8 +30,6 @@ import no.ntnu.bitcoupon.models.TransactionWrapper;
  */
 public class Network {
 
-  public static final String USER_ADDRESS = "1Kau4L6BM1h6QzLYubq1qWrQSjWdZFQgMb";
-  public static final String API_ROOT = "http://bitcoupon.no-ip.org:3002/backend/";
   //  public static final String API_ROOT = "http://78.91.25.28:3002/backend/";
   public static final String API_OUTPUT_HISTORY = "output_history";
   public static final String TAG = Network.class.getSimpleName();
@@ -44,7 +42,7 @@ public class Network {
 
       @Override
       protected OutputHistory doInBackground(Void... params) {
-        String url = API_ROOT + API_OUTPUT_HISTORY;
+        String url = getApiRoot() + API_OUTPUT_HISTORY;
         HttpResponse response = null;
         try {
           Log.v(TAG, "requesting ... " + url);
@@ -96,7 +94,7 @@ public class Network {
     new AsyncTask<Void, Void, Transaction>() {
       @Override
       protected Transaction doInBackground(Void... params) {
-        String url = API_ROOT + API_VERIFY_TRANSACTION;
+        String url = getApiRoot() + API_VERIFY_TRANSACTION;
         HttpResponse response = null;
         try {
           Log.v(TAG, "requesting ... " + url);
@@ -134,7 +132,7 @@ public class Network {
     new AsyncTask<Void, Void, AddressTranslator>() {
       @Override
       protected AddressTranslator doInBackground(Void... params) {
-        String url = API_ROOT + API_TRANSLATE_WORD;
+        String url = getApiRoot() + API_TRANSLATE_WORD;
         HttpResponse response = null;
         try {
           Log.v(TAG, "requesting ... " + url);
@@ -175,7 +173,7 @@ public class Network {
     new AsyncTask<Void, Void, AddressTranslator>() {
       @Override
       protected AddressTranslator doInBackground(Void... params) {
-        String url = API_ROOT + API_TRANSLATE_ADDRESS;
+        String url = getApiRoot() + API_TRANSLATE_ADDRESS;
         HttpResponse response = null;
         try {
           Log.v(TAG, "requesting ... " + url);
@@ -213,5 +211,9 @@ public class Network {
         }
       }
     }.execute();
+  }
+
+  public static String getApiRoot() {
+return    BitCouponApplication.getApplication().getApiRoot();
   }
 }

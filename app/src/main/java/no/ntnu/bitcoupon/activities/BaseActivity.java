@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -15,7 +20,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.net.Socket;
+import java.net.URI;
+
+import no.ntnu.bitcoupon.BitCouponApplication;
+import no.ntnu.bitcoupon.R;
 import no.ntnu.bitcoupon.interfaces.UIHelper;
+import no.ntnu.bitcoupon.network.Network;
 
 /**
  * Created by Patrick on 22.09.2014.
@@ -47,6 +63,69 @@ public abstract class BaseActivity extends Activity implements UIHelper {
     }
     Log.d(TAG, loading ? " started" : " finished - Running jobs left: " + runningJobs);
     updateProgressbarState();
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // Handle item selection
+    switch (item.getItemId()) {
+      case R.id.action_change_url:
+        displayUrlDialog();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
+
+  private void displayUrlDialog() {
+    displayInputDialog("Backend URL", "Enter the URL of the location of the backend server",
+                       new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+                           if (which != DialogInterface.BUTTON_POSITIVE) {
+                             return;
+                           }
+                           final String url = getInputText() + "/backend/";
+                           final Socket socket = null;
+                           new AsyncTask<Void, Void, Boolean>() {
+                             @Override
+                             protected Boolean doInBackground(Void... params) {
+                               boolean reachable = false;
+                               try {
+                                 HttpGet get = new HttpGet(new URI(url));
+                                 HttpClient httpClient = new DefaultHttpClient();
+                                 get.addHeader(Network.getRequestTokenHeader());
+                                 HttpResponse response = httpClient.execute(get);
+                                 reachable = true;
+                               } catch (Exception e) {
+                               }
+                               return reachable;
+                             }
+
+                             @Override
+                             protected void onPostExecute(Boolean reachable) {
+                               if (reachable) {
+                                 SharedPreferences.Editor
+                                     editor =
+                                     BitCouponApplication.getApplication().getSecretPreferences().edit();
+                                 editor.putString(Network.getApiRoot(), url);
+                                 editor.commit();
+                                 displayToast("Successfully connected to " + url + "!");
+                               } else {
+                                 displayToast("Invalid URL!");
+                                 displayUrlDialog();
+                               }
+                             }
+                           }.execute();
+                         }
+                       });
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.main, menu);
+    return true;
   }
 
   private void updateProgressbarState() {
@@ -121,7 +200,6 @@ public abstract class BaseActivity extends Activity implements UIHelper {
         MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
     edit.dispatchTouchEvent(
         MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0));
-
   }
 
   @Override
