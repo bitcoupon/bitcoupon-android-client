@@ -19,10 +19,13 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import bitcoupon.BitCoupon;
+import bitcoupon.transaction.Coupon;
 import bitcoupon.transaction.OutputHistory;
 import bitcoupon.transaction.Transaction;
 import no.ntnu.bitcoupon.BitCouponApplication;
 import no.ntnu.bitcoupon.callbacks.CouponCallback;
+import no.ntnu.bitcoupon.models.CouponWrapper;
 import no.ntnu.bitcoupon.models.TransactionWrapper;
 
 /**
@@ -90,10 +93,17 @@ public class Network {
     return reader;
   }
 
-  public static void spendCoupon(final CouponCallback<Transaction> callback, final Transaction transaction) {
+  public static void spendCoupon(final CouponCallback<Transaction> callback, final OutputHistory outputHistory, final CouponWrapper coupon) {
     new AsyncTask<Void, Void, Transaction>() {
       @Override
       protected Transaction doInBackground(Void... params) {
+        // Generate the send transaction object
+        Transaction transaction = BitCoupon
+            .generateSendTransaction(BitCouponApplication.getApplication().getPrivateKey(),  //
+                                     coupon.getCoupon(), //
+                                     coupon.getReceiverAddress(),  //
+                                     outputHistory);
+
         String url = getApiRoot() + API_VERIFY_TRANSACTION;
         HttpResponse response = null;
         try {

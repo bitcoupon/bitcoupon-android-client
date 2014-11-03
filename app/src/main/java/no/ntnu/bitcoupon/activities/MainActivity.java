@@ -6,10 +6,8 @@ import android.view.MenuInflater;
 
 import com.crashlytics.android.Crashlytics;
 
-import bitcoupon.BitCoupon;
 import bitcoupon.transaction.OutputHistory;
 import bitcoupon.transaction.Transaction;
-import no.ntnu.bitcoupon.BitCouponApplication;
 import no.ntnu.bitcoupon.R;
 import no.ntnu.bitcoupon.callbacks.CouponCallback;
 import no.ntnu.bitcoupon.fragments.CouponFragment;
@@ -54,6 +52,7 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
     inflater.inflate(R.menu.main, menu);
     return true;
   }
+
   @Override
   public void onSpendCoupon(final CouponWrapper coupon) {
     setLoading(true);
@@ -61,31 +60,23 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
       @Override
       public void onSuccess(int statusCode, OutputHistory outputHistory) {
 
-        // Generate the send transaction object
-        Transaction transaction = BitCoupon.generateSendTransaction(
-            BitCouponApplication.getApplication().getPrivateKey(),  //
-            coupon.getCoupon(), //
-            coupon.getReceiverAddress(),  //
-            outputHistory);
-
         Network.spendCoupon(new CouponCallback<Transaction>() {
           @Override
           public void onSuccess(int statusCode, Transaction response) {
             displayToast("Transaction: " + response.toString() + " spent!");
-            getFragmentManager().popBackStack();
             couponListFragment.removeCoupon(response);
             couponListFragment.fetchAll();
+            setLoading(false);
           }
 
           @Override
           public void onFail(int statusCode) {
             displayToast("Failed to spend coupon: " + coupon.getTitle());
-            getFragmentManager().popBackStack();
+            setLoading(false);
           }
 
-        }, transaction);
-        setLoading(false);
-
+        }, outputHistory, coupon);
+        getFragmentManager().popBackStack();
       }
 
       @Override
