@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
         Network.spendCoupon(new CouponCallback<Transaction>() {
           @Override
           public void onSuccess(int statusCode, Transaction response) {
-            displayToast("Transaction: " + response.toString() + " spent!");
+            displayToast("Successfully spend coupon: " + coupon.getTitle() + "!");
             couponListFragment.removeCoupon(response);
             couponListFragment.fetchAll();
             setLoading(false);
@@ -77,6 +77,7 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
 
         }, outputHistory, coupon);
         getFragmentManager().popBackStack();
+        hideKeyboard();
       }
 
       @Override

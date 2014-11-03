@@ -108,8 +108,9 @@ public abstract class BaseActivity extends Activity implements UIHelper {
                                  SharedPreferences.Editor
                                      editor =
                                      BitCouponApplication.getApplication().getSecretPreferences().edit();
-                                 editor.putString(Network.getApiRoot(), url);
+                                 editor.putString(BitCouponApplication.API_ROOT, url);
                                  editor.commit();
+                                 BitCouponApplication.getApplication().fetchNewAddressWord();
                                  displayToast("Successfully connected to " + url + "!");
                                } else {
                                  displayToast("Invalid URL!");
@@ -206,6 +207,16 @@ public abstract class BaseActivity extends Activity implements UIHelper {
   public void hideKeyboard(EditText edit) {
     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
+  }
+
+  public void hideKeyboard() {
+    InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+    // check if no view has focus:
+    View view = this.getCurrentFocus();
+    if (view != null) {
+      inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
   }
 
   @Override

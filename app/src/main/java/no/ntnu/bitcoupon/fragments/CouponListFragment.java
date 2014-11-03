@@ -43,6 +43,7 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
   private AbsListView couponList;
   private CouponListAdapter couponAdapter;
   private PullToRefreshLayout mPullToRefreshLayout;
+  private TextView addressField;
 
   public static CouponListFragment newInstance() {
     CouponListFragment fragment = new CouponListFragment();
@@ -91,7 +92,7 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
     // Set OnItemClickListener so we can be notified on item clicks
     couponList.setOnItemClickListener(this);
 
-    final TextView addressField = (TextView) view.findViewById(R.id.tv_addreess);
+    addressField = (TextView) view.findViewById(R.id.tv_address);
     Network.fetchAddressWord(new CouponCallback<AddressTranslator>() {
       @Override
       public void onSuccess(int statusCode, AddressTranslator response) {
@@ -113,6 +114,7 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
       @Override
       public void onSuccess(int statusCode, OutputHistory outputHistory) {
         CouponList couponList = BitCoupon.getCoupons(BitCouponApplication.getApplication().getAddress(), outputHistory);
+        addressField.setText("Your ID: " + BitCouponApplication.getApplication().getAddressWord());
 
         List<Coupon> coupons = couponList.getCoupons();
         couponAdapter.clear();
@@ -131,7 +133,7 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
       public void onFail(int statusCode) {
         Log.v(TAG, "fetch failed: " + statusCode);
         setLoading(false);
-        displayToast("Error fetching: " + statusCode);
+        displayToast("Fetching Coupons Failed!");
         mPullToRefreshLayout.setRefreshComplete();
       }
     });

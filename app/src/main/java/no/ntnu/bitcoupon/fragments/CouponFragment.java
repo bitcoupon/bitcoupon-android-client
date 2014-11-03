@@ -61,6 +61,8 @@ public class CouponFragment extends BaseFragment {
 
     CouponWrapper coupon = CouponWrapper.fromJson(getArguments().getString(CouponWrapper.COUPON_JSON));
     title.setText(coupon.getTitle());
+
+    showKeyboard(receiver);
     return view;
   }
 
@@ -68,7 +70,7 @@ public class CouponFragment extends BaseFragment {
     return new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        String receiverWord = receiver.getText().toString().trim();
+        String receiverWord = receiver.getText().toString().trim().toLowerCase();
         if (receiverWord.length() == 0) {
           displayToast("Please fill in a receiver!");
           return;

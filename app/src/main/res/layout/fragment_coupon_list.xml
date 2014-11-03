@@ -10,7 +10,7 @@
             android:id="@+id/ptr_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/tv_addreess"
+            android:layout_above="@+id/tv_address"
             android:layout_alignParentTop="true"
             >
 
@@ -37,7 +37,7 @@
     <TextView
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:id="@+id/tv_addreess"
+            android:id="@+id/tv_address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/gray"
@@ -59,7 +59,7 @@
                 android:layout_width="0dp"
                 android:layout_weight=".3"
                 android:layout_height="wrap_content"
-                android:text="Fetch All"
+                android:text="Fetch Coupons"
                 android:id="@+id/b_fetch_all"
                 style="@style/Roboto_Button"
                 />

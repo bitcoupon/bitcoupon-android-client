@@ -3,7 +3,6 @@ package no.ntnu.bitcoupon;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.StrictMode;
 
 import bitcoupon.BitCoupon;
 import bitcoupon.transaction.OutputHistoryRequest;
@@ -27,8 +26,9 @@ public class BitCouponApplication extends Application {
   private static final String OUTPUT_HISTORY_REQUEST = "OUTPUT_HISTORY_REQUEST";
   private static final String ADDRESS = "ADDRESS";
   private static final String ADDRESS_WORD = "ADDRESS_WORD";
-  private static final String API_ROOT = "API_ROOT";
+  public static final String API_ROOT = "API_ROOT";
   private static BitCouponApplication application;
+  private Object newAddressWord;
 
   @Override
   public void onCreate() {
@@ -117,6 +117,20 @@ public class BitCouponApplication extends Application {
       url = getSecretPreferences().getString(API_ROOT, null);
     }
     return url;
+  }
+
+  public void fetchNewAddressWord() {
+    Network.fetchAddressWord(new CouponCallback<AddressTranslator>() {
+      @Override
+      public void onSuccess(int statusCode, AddressTranslator response) {
+        setAddressWord(response.getWord());
+      }
+
+      @Override
+      public void onFail(int statusCode) {
+      }
+    });
+
   }
 }
 
