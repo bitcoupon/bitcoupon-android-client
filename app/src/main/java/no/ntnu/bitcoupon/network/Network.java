@@ -201,9 +201,9 @@ public class Network {
       }
 
       @Override
-      protected void onPostExecute(AddressTranslator transaction) {
-        if (transaction != null) {
-          callback.onSuccess(HttpStatus.SC_OK, transaction);
+      protected void onPostExecute(AddressTranslator translation) {
+        if (translation != null) {
+          callback.onSuccess(HttpStatus.SC_OK, translation);
         } else {
           callback.onFail(HttpStatus.SC_NO_CONTENT);
         }

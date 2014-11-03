@@ -55,21 +55,12 @@ public class CouponFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_coupon, container, false);
 
     TextView title = (TextView) view.findViewById(R.id.tv_coupon_title);
-    TextView id = (TextView) view.findViewById(R.id.tv_coupon_id);
-    TextView description = (TextView) view.findViewById(R.id.tv_coupon_description);
-    TextView modified = (TextView) view.findViewById(R.id.tv_coupon_modified);
-    TextView created = (TextView) view.findViewById(R.id.tv_coupon_created);
     TextView spendButton = (TextView) view.findViewById(R.id.b_spend_coupon);
     final EditText receiver = (EditText) view.findViewById(R.id.tv_receiver);
     spendButton.setOnClickListener(getSpendCouponListener(receiver));
 
     CouponWrapper coupon = CouponWrapper.fromJson(getArguments().getString(CouponWrapper.COUPON_JSON));
-    id.setText("ID: " + coupon.getId());
     title.setText(coupon.getTitle());
-    created.setText("Created: " + coupon.getCreated());
-    description.setText(CouponWrapper.toJson(coupon));
-    title.setText(coupon.getTitle());
-    modified.setText("Modified:  " + coupon.getModified());
     return view;
   }
 
@@ -91,8 +82,23 @@ public class CouponFragment extends BaseFragment {
   private CouponCallback<AddressTranslator> getWordAddressTranslationCallback() {
     return new CouponCallback<AddressTranslator>() {
       @Override
-      public void onSuccess(int statusCode, AddressTranslator response) {
-        DialogInterface.OnClickListener dialogClickListener = getSpendCouponConfirmationDialogListener();
+      public void onSuccess(int statusCode, final AddressTranslator response) {
+        if(response.getAddress() == null){
+          displayToast("Invalid receiver ID!");
+          return;
+        }
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+              case DialogInterface.BUTTON_POSITIVE:
+                CouponWrapper coupon = CouponWrapper.fromJson(getArguments().getString(CouponWrapper.COUPON_JSON));
+                coupon.setReceiverAddress(response.getAddress());
+                mListener.onSpendCoupon(coupon);
+                break;
+            }
+          }
+        };
         displayPromptDialog("Spend Coupon Confirmation", "Are you sure you want to spend this coupon?",
                             dialogClickListener);
       }
@@ -103,20 +109,5 @@ public class CouponFragment extends BaseFragment {
       }
     };
   }
-
-  private DialogInterface.OnClickListener getSpendCouponConfirmationDialogListener() {
-    return new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        switch (which) {
-          case DialogInterface.BUTTON_POSITIVE:
-            CouponWrapper coupon = CouponWrapper.fromJson(getArguments().getString(CouponWrapper.COUPON_JSON));
-            mListener.onSpendCoupon(coupon);
-            break;
-        }
-      }
-    };
-  }
-
 }
 

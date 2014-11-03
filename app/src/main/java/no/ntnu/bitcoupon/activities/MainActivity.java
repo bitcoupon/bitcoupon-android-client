@@ -41,7 +41,6 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
 
   @Override
   public void onCouponClicked(CouponWrapper coupon) {
-    coupon.setModified();
     getFragmentManager().beginTransaction().replace(R.id.container, CouponFragment.newInstance(coupon))
         .addToBackStack(CouponFragment.TAG).commit();
   }
@@ -54,10 +53,11 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
       public void onSuccess(int statusCode, OutputHistory outputHistory) {
 
         // Generate the send transaction object
-        Transaction transaction = BitCoupon.generateSendTransaction(BitCouponApplication.getApplication().getPrivateKey(),  //
-                                                                    coupon.getCoupon(), //
-                                                                    BitCouponApplication.getApplication().getAddress(),  //
-                                                                    outputHistory);
+        Transaction transaction = BitCoupon.generateSendTransaction(
+            BitCouponApplication.getApplication().getPrivateKey(),  //
+            coupon.getCoupon(), //
+            coupon.getReceiverAddress(),  //
+            outputHistory);
 
         Network.spendCoupon(new CouponCallback<Transaction>() {
           @Override
@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
 
           @Override
           public void onFail(int statusCode) {
-            displayToast("Failed to spend coupon with id " + coupon.getId());
+            displayToast("Failed to spend coupon: " + coupon.getTitle());
             getFragmentManager().popBackStack();
           }
 
@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
 
       @Override
       public void onFail(int statusCode) {
-        displayToast("Failed to spend coupon with id " + coupon.getId());
+        displayToast("Failed to spend coupon with id " + coupon.getTitle());
         setLoading(false);
       }
     });

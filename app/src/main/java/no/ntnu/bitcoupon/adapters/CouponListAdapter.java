@@ -59,22 +59,10 @@ public class CouponListAdapter extends BaseAdapter {
       view = convertView;
     }
 
-    TextView id = (TextView) view.findViewById(R.id.tv_coupon_id);
     TextView title = (TextView) view.findViewById(R.id.tv_coupon_title);
-    TextView description = (TextView) view.findViewById(R.id.tv_coupon_description);
-    TextView modified = (TextView) view.findViewById(R.id.tv_coupon_modified);
-    TextView created = (TextView) view.findViewById(R.id.tv_coupon_created);
 
     CouponWrapper coupon = getItem(position);
-    id.setText(coupon.getId());
     title.setText(coupon.getTitle());
-    created.setText(coupon.getCreated().toString());
-    modified.setText(coupon.getModified().toString());
-    description.setText(coupon.getDescription());
-
-    if (description.getText().toString().trim().length() <= 0) {
-      description.setVisibility(View.GONE);
-    }
 
     return view;
   }
