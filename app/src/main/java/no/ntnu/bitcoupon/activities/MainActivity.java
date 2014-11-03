@@ -87,18 +87,4 @@ public class MainActivity extends BaseActivity implements CouponListFragmentList
     });
   }
 
-  /**
-   * Check whether this coupon is valid; ie. it exist in the transaction history received from the server If the coupon
-   * is invalid, this probably means the coupon was spent elsewhere, or that it was invalidated by the beckend
-   */
-//  private boolean isCouponValid(OutputHistory OutputHistory, CouponWrapper coupon) {
-//    List<String> creatorAddresses = BitCoupon.getCreatorAddresses(Network.PRIVATE_KEY,  //
-//                                                                  OutputHistory);
-//    for (String couponAddress : creatorAddresses) {
-//      if (couponAddress.equalsIgnoreCase(coupon.getCouponAddress())) {
-//        return true;
-//      }
-//    }
-//    return false;
-//  }
 }

@@ -31,8 +31,8 @@ import no.ntnu.bitcoupon.models.TransactionWrapper;
 public class Network {
 
   public static final String USER_ADDRESS = "1Kau4L6BM1h6QzLYubq1qWrQSjWdZFQgMb";
-    public static final String API_ROOT = "http://bitcoupon.no-ip.org:3002/backend/";
-//  public static final String API_ROOT = "http://78.91.25.28:3002/backend/";
+  public static final String API_ROOT = "http://bitcoupon.no-ip.org:3002/backend/";
+  //  public static final String API_ROOT = "http://78.91.25.28:3002/backend/";
   public static final String API_OUTPUT_HISTORY = "output_history";
   public static final String TAG = Network.class.getSimpleName();
   public static final String API_VERIFY_TRANSACTION = "verify_transaction";
@@ -171,7 +171,7 @@ public class Network {
   }
 
 
-  public static void fetchWordAddress(final CouponCallback<AddressTranslator> callback) {
+  public static void fetchWordAddress(final CouponCallback<AddressTranslator> callback, final String receiverWord) {
     new AsyncTask<Void, Void, AddressTranslator>() {
       @Override
       protected AddressTranslator doInBackground(Void... params) {
@@ -185,12 +185,16 @@ public class Network {
           post.addHeader("Content-type", "application/json");
 
           AddressTranslator translator = new AddressTranslator();
-          translator.setWord(BitCouponApplication.getApplication().getAddressWord());
+          translator.setWord(receiverWord);
 
           String json = AddressTranslator.toJson(translator);
           post.setEntity(new StringEntity(json, "UTF-8"));
           HttpClient httpClient = new DefaultHttpClient();
           response = httpClient.execute(post);
+
+          if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            return null;
+          }
 
           return AddressTranslator.fromJson(getReader(response));
 

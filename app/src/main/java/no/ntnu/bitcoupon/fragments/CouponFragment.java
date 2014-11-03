@@ -73,7 +73,7 @@ public class CouponFragment extends BaseFragment {
           displayToast("Please fill in a receiver!");
           return;
         } else {
-          Network.fetchWordAddress(getWordAddressTranslationCallback());
+          Network.fetchWordAddress(getWordAddressTranslationCallback(),receiverWord);
         }
       }
     };
@@ -105,6 +105,7 @@ public class CouponFragment extends BaseFragment {
 
       @Override
       public void onFail(int statusCode) {
+        displayToast("That's not a legal ID!");
 
       }
     };
