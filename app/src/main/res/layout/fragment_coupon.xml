@@ -28,11 +28,27 @@
                 />
 
 
+        <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:singleLine="true"
+                android:text="Spend Coupon"
+                android:id="@+id/b_spend_coupon"
+                style="@style/Roboto_Button"
+                />
+
+        <View
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                />
+
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:hint="receiverAddress ID"
+                android:hint="receiver ID"
+                android:textAllCaps="true"
                 android:id="@+id/tv_receiver"
                 />
 
@@ -41,8 +57,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:singleLine="true"
-                android:text="Spend Coupon"
-                android:id="@+id/b_spend_coupon"
+                android:text="Gift Coupon"
+                android:id="@+id/b_gift_coupon"
                 style="@style/Roboto_Button"
                 />
 

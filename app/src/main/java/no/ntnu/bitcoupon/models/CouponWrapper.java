@@ -14,19 +14,21 @@ public class CouponWrapper {
   private final int couponNumber;
   private final Coupon coupon;
   private String receiverAddress;
+  private Payload payload;
 
   public CouponWrapper(int couponNumber, Coupon coupon) {
     this.couponNumber = couponNumber;
     this.coupon = coupon;
+
+    this.payload = Payload.fromJson(coupon.getPayload());
   }
 
   public String getTitle() {
-    return coupon.getPayload();
+    return payload.getTitle();
   }
 
-
   public String getDescription() {
-    return String.valueOf(couponNumber);
+    return payload.getDescription();
   }
 
   public static CouponWrapper fromJson(String json) {
@@ -35,6 +37,10 @@ public class CouponWrapper {
 
   public static String toJson(CouponWrapper item) {
     return new Gson().toJson(item, CouponWrapper.class);
+  }
+
+  public String getReturnWord(){
+    return payload.getReturnWord();
   }
 
   @Override

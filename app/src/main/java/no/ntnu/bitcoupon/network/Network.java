@@ -20,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import bitcoupon.BitCoupon;
-import bitcoupon.transaction.Coupon;
 import bitcoupon.transaction.OutputHistory;
 import bitcoupon.transaction.Transaction;
 import no.ntnu.bitcoupon.BitCouponApplication;

@@ -25,9 +25,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/empty"
-                android:text="No coupons:("
+                android:text="No coupons"
+                android:textAllCaps="true"
                 android:textColor="@color/gray_light"
-                android:textSize="40sp"
+                android:textSize="30sp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 />

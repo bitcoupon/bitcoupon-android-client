@@ -125,7 +125,8 @@ public class CouponListFragment extends BaseFragment implements AbsListView.OnIt
         couponAdapter.notifyDataSetChanged();
 
         setLoading(false);
-        displayToast("Received " + coupons.size() + " coupons from the server!");
+        String s = coupons.size() == 1 ? "" : "s";
+        displayToast("You have " + coupons.size() + " coupon" + s + "!");
         mPullToRefreshLayout.setRefreshComplete();
       }
 
