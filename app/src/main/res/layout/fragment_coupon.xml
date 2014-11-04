@@ -58,8 +58,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:hint="receiver ID"
-                android:textAllCaps="true"
                 android:id="@+id/tv_receiver"
+                android:singleLine="true"
                 />
 
         <Button
