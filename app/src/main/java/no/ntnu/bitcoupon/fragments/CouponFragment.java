@@ -55,6 +55,7 @@ public class CouponFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_coupon, container, false);
 
     TextView title = (TextView) view.findViewById(R.id.tv_coupon_title);
+    TextView description = (TextView) view.findViewById(R.id.tv_coupon_description);
     TextView spendButton = (TextView) view.findViewById(R.id.b_spend_coupon);
     TextView giftButton = (TextView) view.findViewById(R.id.b_gift_coupon);
     final EditText receiver = (EditText) view.findViewById(R.id.tv_receiver);
@@ -63,6 +64,7 @@ public class CouponFragment extends BaseFragment {
 
     CouponWrapper coupon = getCoupon();
     title.setText(coupon.getTitle());
+    description.setText(coupon.getDescription());
 
     showKeyboard(receiver);
     return view;

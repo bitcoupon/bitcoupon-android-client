@@ -39,7 +39,7 @@ public class CouponWrapper {
     return new Gson().toJson(item, CouponWrapper.class);
   }
 
-  public String getReturnWord(){
+  public String getReturnWord() {
     return payload.getReturnWord();
   }
 
