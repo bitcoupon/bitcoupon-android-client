@@ -81,7 +81,7 @@ public class Network {
   }
 
   public static Header getRequestTokenHeader() {
-    Header header = new BasicHeader("Token", "CREATOR_ADDRESS");
+    Header header = new BasicHeader("Token", "47012b4f10bdf8c4a003475ebd2413b5fc6e661edcf0e746f6703f8cea47b1305bf9f13605cbd6f10594653018c97d3d018c6926397dc4f8ae7f771f75b71c3a");
     header.toString();
     return header;
   }
