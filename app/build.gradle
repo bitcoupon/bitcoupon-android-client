@@ -23,8 +23,8 @@ android {
         applicationId "no.ntnu.bitcoupon"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 8
-        versionName "0.7"
+        versionCode 9
+        versionName "0.8"
     }
     buildTypes {
         release {
